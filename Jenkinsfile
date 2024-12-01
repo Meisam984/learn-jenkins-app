@@ -94,6 +94,9 @@ pipeline {
                     reuseNode true
                 }
             }
+            environment {
+                CI_ENVIRONMENT_URL='https://subtle-pothos-d8b06c.netlify.app'
+            }
             steps {
                 sh '''
                     npx playwright test --reporter=html
