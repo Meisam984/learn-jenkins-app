@@ -12,7 +12,7 @@ pipeline {
             agent {
                 docker {
                     image 'amazon/aws-cli'
-                    args "--entrypint=''"
+                    args "--entrypoint=''"
                 }
             }
             steps {
