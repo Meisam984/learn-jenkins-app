@@ -28,16 +28,23 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            steps {
-                sh 'docker image build -t myjenkinsapp .'
-            }
-        }
-        stage('AWS') {
             agent {
                 docker {
                     image 'my-aws-cli'
                     reuseNode true
                     args "-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+                }
+            }
+            steps {
+                sh 'docker image build -t myjenkinsapp .'
+            }
+        }
+        stage('Deploy to AWS') {
+            agent {
+                docker {
+                    image 'my-aws-cli'
+                    reuseNode true
+                    args "--entrypoint=''"
                 }
             }
             steps {
