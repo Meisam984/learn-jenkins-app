@@ -11,9 +11,6 @@ pipeline {
                     args "--entrypoint=''"
                 }
             }
-            environment {
-                
-            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-id', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
