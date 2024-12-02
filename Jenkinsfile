@@ -38,7 +38,13 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker image build -t $AWS_ECR_REPO/$APP_NAME:$REACT_APP_VERSION .'
+                withCredentials([usernamePassword(credentialsId: 'aws-id', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh '''
+                        docker image build -t $AWS_ECR_REPO/$APP_NAME:$REACT_APP_VERSION .
+                        aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ECR_REPO
+                        docker image push $AWS_ECR_REPO/$APP_NAME:$REACT_APP_VERSION
+                    '''
+                }
             }
         }
         stage('Deploy to AWS') {
