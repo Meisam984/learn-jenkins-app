@@ -7,6 +7,7 @@ pipeline {
         AWS_ECS_CLUSTER="LearnJenkinsApp-Cluster-Prod"
         AWS_ECS_SERVICE="LearnJenkinsApp-Service-Prod"
         AWS_ECS_TASK_DEFINITION="LearnJenkinsApp-TaskDefinition-Prod"
+        AWS_ECR_REPO='905418032282.dkr.ecr.eu-west-1.amazonaws.com'
     }
     stages {
         stage('Build') {
@@ -37,7 +38,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker image build -t $APP_NAME:$REACT_APP_VERSION .'
+                sh 'docker image build -t $AWS_ECR_REPO/$APP_NAME:$REACT_APP_VERSION .'
             }
         }
         stage('Deploy to AWS') {
