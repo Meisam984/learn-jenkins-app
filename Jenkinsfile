@@ -9,14 +9,14 @@ pipeline {
             agent {
                 docker {
                     image 'amazon/aws-cli:2.13.2'
-                    args "--entrypoint=''"
+                    args "-u root --entrypoint=''"
                 }
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-id', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                     aws --version
-                    sudo yum update && sudo yum install jq -y
+                    yum install jq -y
                     LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json | jq -r '.taskDefinition.revision')
                     ehco $LATEST_TD_REVISION
                     aws ecs update-service --cluster LearnJenkinsApp-Cluster-Prod --service LearnJenkinsApp-Service-Prod --task-definition LearnJenkinsApp-TaskDefinition-Prod:2$LATEST_TD_REVISION
